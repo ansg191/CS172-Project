@@ -1,3 +1,4 @@
+import csv
 import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.spiders import CrawlSpider, Rule
@@ -60,6 +61,12 @@ process = CrawlerProcess(settings={
     },
 })
 
+uni_urls = []
+with open('universities.csv', 'r') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        uni_urls.append(row[1])
+
 # Start the crawling process for each domain
 process.crawl(ExtendedEduSpider, start_urls=[
     'https://www.geeksforgeeks.org/data-structures/',
@@ -77,5 +84,5 @@ process.crawl(ExtendedEduSpider, start_urls=[
     'https://en.wikipedia.org/wiki/Data_mining',
     'https://en.wikipedia.org/wiki/Information_retrieval',
     'https://en.wikipedia.org/wiki/Natural_language_processing',
-])
+] + uni_urls)
 process.start()
