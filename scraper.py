@@ -84,5 +84,8 @@ process.crawl(ExtendedEduSpider, start_urls=[
     'https://en.wikipedia.org/wiki/Data_mining',
     'https://en.wikipedia.org/wiki/Information_retrieval',
     'https://en.wikipedia.org/wiki/Natural_language_processing',
+    'https://www.geeksforgeeks.org/wikipedia-module-in-python',
+    'https://www.geeksforgeeks.org/how-to-extract-wikipedia-data-in-python',
+    'https://www.geeksforgeeks.org/web-scraping-from-wikipedia-using-python-a-complete-guide',
 ] + uni_urls)
 process.start()
