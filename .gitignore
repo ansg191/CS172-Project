@@ -1,4 +1,5 @@
 educational_data.csv
+computerscience_data.csv
 *.ipynb
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
