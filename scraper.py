@@ -8,7 +8,6 @@ import os
 
 class ExtendedEduSpider(CrawlSpider):
     name = 'extended_education_spider'
-    allowed_domains = ['geeksforgeeks.org', 'wikipedia.org', 'w3schools.com']
     custom_settings = {
         'CONCURRENT_REQUESTS': 16,  # Increase concurrency with multiple threads
         'CONCURRENT_REQUESTS_PER_DOMAIN': 8,  # Limit concurrency per domain
