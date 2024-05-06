@@ -1,4 +1,3 @@
-import csv
 import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.spiders import CrawlSpider, Rule
@@ -6,85 +5,90 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.exceptions import CloseSpider
 import os
 
-class ExtendedEduSpider(CrawlSpider):
-    name = 'extended_education_spider'
+
+class ComputerScienceSpyder(CrawlSpider):
+    name = 'computerscience_data'
+    allowed_domains = ['c-sharpcorner.com', 'wikipedia.org', 'javatpoint.com']
     custom_settings = {
-        'CONCURRENT_REQUESTS': 16,  # Increase concurrency with multiple threads
-        'CONCURRENT_REQUESTS_PER_DOMAIN': 8,  # Limit concurrency per domain
-        'DOWNLOAD_DELAY': 0.5,  # Reduce delay between requests
-        'AUTOTHROTTLE_ENABLED': True,  # Automatically adjust crawling speed
-        'AUTOTHROTTLE_START_DELAY': 1,  # Initial delay for autothrottle
-        'AUTOTHROTTLE_TARGET_CONCURRENCY': 16,  # Target concurrency level
-        'HTTPCACHE_ENABLED': True,  # Enable HTTP caching
-        'HTTPCACHE_EXPIRATION_SECS': 3600,  # Cache expiration time (in seconds)
+        'CONCURRENT_REQUESTS': 8,
+        'CONCURRENT_REQUESTS_PER_DOMAIN': 4,
+        'DOWNLOAD_DELAY': 1.0,
+        'AUTOTHROTTLE_ENABLED': True,
+        'AUTOTHROTTLE_START_DELAY': 2,
+        'AUTOTHROTTLE_TARGET_CONCURRENCY': 8,
+        'HTTPCACHE_ENABLED': True,
+        'HTTPCACHE_EXPIRATION_SECS': 1800,
     }
 
     def __init__(self, *args, **kwargs):
-        super(ExtendedEduSpider, self).__init__(*args, **kwargs)
+        super(ComputerScienceSpyder, self).__init__(*args, **kwargs)
         self.scraped_urls = set()
 
-    def parse_item(self, response):
-        if response.url in self.scraped_urls:
+    def parsing_data_func(self, result):
+        if result.url in self.scraped_urls:
             return
-        self.scraped_urls.add(response.url)
+        self.scraped_urls.add(result.url)
 
-        content = ' '.join(response.xpath('//p/text()').extract()).strip()
-        image_urls = [response.urljoin(url) for url in response.css('img::attr(src)').extract()]
+        content = ' '.join(result.xpath('//p/text()').getall()).strip()
+
+        src_list = result.css('img::attr(src)').extract()
+
+        image_urls = []
+
+        for url in src_list:
+            full_url = result.urljoin(url)
+
+            image_urls.append(full_url)
+
         yield {
-            'Domain': response.url.split('/')[2],
-            'URL': response.url,
-            'Title': response.css('title::text').get(),
+            'Domain': result.url.split('/')[2],
+            'URL': result.url,
+            'Title': result.css('title::text').get(),
             'Content': content,
             'Image URLs': '|'.join(image_urls),
         }
 
-        # Check the size of the output file
-        file_size = os.path.getsize('educational_data.csv') / (1024 * 1024 * 1024)  # Convert bytes to gigabytes
-        if file_size >= 0.5:  # Stop spider after collecting 1GB of data
-            raise CloseSpider(reason='Reached 1GB limit')
+        file_path = 'computerscience_data.csv'
+        file_size_bytes = os.path.getsize(file_path)
+        bytes_per_gigabyte = 1024 * 1024 * 1024
+        file_size_gigabytes = file_size_bytes / bytes_per_gigabyte
+        print(f"The file size is {file_size_gigabytes} GB")
 
-    # Define rules to follow links
+        if file_size_gigabytes >= 0.5:
+            raise CloseSpider("Done with Crawling")
+
     rules = (
-        Rule(LinkExtractor(allow=()), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow=()), callback='parsing_data_func', follow=True),
     )
 
-# Configure the output and other settings
+
 process = CrawlerProcess(settings={
     'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
     'ROBOTSTXT_OBEY': True,
     'FEEDS': {
-        'educational_data.csv': {
+        'computerscience_data.csv': {
             'format': 'csv',
-            'fields': ['Domain', 'URL', 'Title', 'Content', 'Image URLs'],
+            'fields': ['Domain', 'Title', 'ParsedContent', 'ImageResourceLocator', 'ResourceLocator'],
         },
     },
 })
 
-uni_urls = []
-with open('universities.csv', 'r') as file:
-    reader = csv.reader(file)
-    for row in reader:
-        uni_urls.append(row[1])
-
 # Start the crawling process for each domain
-process.crawl(ExtendedEduSpider, start_urls=[
-    'https://www.geeksforgeeks.org/data-structures/',
-    'https://en.wikipedia.org/wiki/Artificial_intelligence',
-    'https://www.w3schools.com/js/default.asp',
-    'https://www.w3schools.com/sql/default.asp',
-    'https://www.w3schools.com/python/default.asp',
-    'https://www.w3schools.com/java/default.asp',
-    'https://www.w3schools.com/php/default.asp',
-    'https://www.w3schools.com/c/index.php',
-    'https://www.geeksforgeeks.org/machine-learning/',
-    'https://www.geeksforgeeks.org/python-mongodb-tutorial/',
-    'https://www.geeksforgeeks.org/system-design-tutorial/',
-    'https://www.geeksforgeeks.org/web-design/',
-    'https://en.wikipedia.org/wiki/Data_mining',
-    'https://en.wikipedia.org/wiki/Information_retrieval',
-    'https://en.wikipedia.org/wiki/Natural_language_processing',
-    'https://www.geeksforgeeks.org/wikipedia-module-in-python',
-    'https://www.geeksforgeeks.org/how-to-extract-wikipedia-data-in-python',
-    'https://www.geeksforgeeks.org/web-scraping-from-wikipedia-using-python-a-complete-guide',
-] + uni_urls)
+process.crawl(ComputerScienceSpyder, start_urls=[
+    'https://www.javatpoint.com/javascript-tutorial'
+    'https://www.javatpoint.com/c-programming-language-tutorial'
+    'https://www.javatpoint.com/cloud-computing'
+    'https://www.javatpoint.com/ajax-tutorial'
+    'https://www.javatpoint.com/json-tutorial'
+    'https://en.wikipedia.org/wiki/BERT_(language_model)'
+    'https://en.wikipedia.org/wiki/Computer_vision'
+    'https://www.c-sharpcorner.com/interview-questions-by-technology/android-programming'
+    'https://www.c-sharpcorner.com/interview-questions-by-technology/dot_net_2015',
+    'https://www.c-sharpcorner.com/interview-questions-by-technology/android-programming',
+    'https://www.c-sharpcorner.com/interview-questions-by-technology/databases-and-dba',
+    'https://www.c-sharpcorner.com/interview-questions-by-technology/ios',
+    'https://en.wikipedia.org/wiki/C_Sharp_(programming_language)',
+    'https://en.wikipedia.org/wiki/C%2B%2B',
+    'https://en.wikipedia.org/wiki/U-Net',
+])
 process.start()
