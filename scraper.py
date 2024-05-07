@@ -59,10 +59,10 @@ class ComputerScienceSpyder(CrawlSpider):
 
         yield {
             'Domain': result.url.split('/')[2],
-            'URL': result.url,
             'Title': result.css('title::text').get(),
-            'Content': content,
-            'Image URLs': '|'.join(image_urls),
+            'ParsedContent': content,
+            'ImageResourceLocator': '|'.join(image_urls),
+            'ResourceLocator': result.url,
         }
 
         file_size_bytes = os.path.getsize(OUTPUT_FILE)
