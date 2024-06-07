@@ -1,0 +1,20 @@
+.card-body {
+    text-align: left;
+}
+
+.doc-title {
+    font-size: 1.25em;
+    margin: 0;
+}
+
+.doc-domain-score {
+    margin-top: 0;
+    display: flex;
+    flex-direction: row;
+
+    color: gray;
+}
+
+.doc-domain {
+    margin: 0 1em 0 0;
+}

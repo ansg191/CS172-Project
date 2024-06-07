@@ -1,0 +1,26 @@
+#root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.card {
+    margin: 2em;
+    padding: 1.5em;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.searchbox {
+    /*margin-right: 1em;*/
+    /*width: 80%;*/
+}
+
+.item-container {
+    margin-top: 1em;
+}
