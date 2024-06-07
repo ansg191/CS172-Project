@@ -70,6 +70,7 @@ class Index:
             doc.add(StoredField("url", rows[i][4]))
             writer.addDocument(doc)
 
+        print("Finished Indexing...")
         writer.close()
 
     def query(self, query):
@@ -77,10 +78,12 @@ class Index:
         lucene.getVMEnv().attachCurrentThread()
 
         reader = DirectoryReader.open(self.dir)
-        print(reader.numDocs())
         searcher = IndexSearcher(reader)
-        parser = QueryParser("content", self.analyzer)
-        q = parser.parse(query)
+
+        parser = QueryParser("<default field>", self.analyzer)
+
+        new_query = "content:" + query + " OR title:" + query
+        q = parser.parse(new_query)
         hits = searcher.search(q, 10)
 
         results = []
@@ -99,4 +102,5 @@ class Index:
                 }
             )
 
+        lucene.getVMEnv().detachCurrentThread()
         return results
