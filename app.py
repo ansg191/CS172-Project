@@ -1,12 +1,14 @@
 import flask
 import json
 from flask import Flask, Response
+from flask_compress import Compress
 from flask_cors import CORS
 
 from index import Index
 
 app = Flask(__name__)
 CORS(app)
+Compress(app)
 
 index = Index()
 with app.app_context():
