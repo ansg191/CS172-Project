@@ -13,7 +13,7 @@ function App() {
             return;
         }
 
-        fetch(`http://127.0.0.1:5000/query?q=${query}`, {
+        fetch(`/query?q=${query}`, {
             method: "GET"
         })
             .then(res => res.json())
