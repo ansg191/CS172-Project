@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
-import Doc, {isResultDoc, ResultDoc} from "./Doc.tsx";
+import Doc from "./Doc.tsx";
 import './App.css'
+import {isResultDoc, ResultDoc} from "./resultdoc.ts";
 
 function App() {
     const [query, setQuery] = useState('');
