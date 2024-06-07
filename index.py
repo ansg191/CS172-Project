@@ -2,7 +2,7 @@ import csv
 import sys
 import lucene
 
-from java.nio.file import Path, Paths
+from java.nio.file import Paths
 from org.apache.lucene.analysis.standard import StandardAnalyzer
 from org.apache.lucene.document import Document, Field, TextField, StoredField
 from org.apache.lucene.index import IndexWriter, IndexWriterConfig, DirectoryReader
@@ -15,6 +15,8 @@ INDEX_PATH = "index/"
 CSV_PATH = "computerscience_data.csv"
 
 initialized = False
+
+csv.field_size_limit(sys.maxsize)
 
 
 class Index:
@@ -50,12 +52,16 @@ class Index:
         if self.has_data():
             return
 
+        print("Building Index...")
         writerConfig = IndexWriterConfig(StandardAnalyzer())
         writer = IndexWriter(self.dir, writerConfig)
 
         rows = self.read_csv()
 
         for i in range(1, len(rows)):
+            if i % 100 == 0:
+                print(f"Processing {i}/{len(rows)}")
+
             doc = Document()
             doc.add(TextField("domain", rows[i][0], Field.Store.YES))
             doc.add(TextField("title", rows[i][1], Field.Store.YES))
@@ -81,15 +87,16 @@ class Index:
         for hit in hits.scoreDocs:
             doc = searcher.doc(hit.doc)
 
-            results.append({
-                "score": hit.score,
-                "id": hit.doc,
-                "domain": doc.get("domain"),
-                "title": doc.get("title"),
-                "content": "",
-                "content": doc.get("content"),
-                "images": doc.get("images").split("|"),
-                "url": doc.get("url"),
-            })
+            results.append(
+                {
+                    "score": hit.score,
+                    "id": hit.doc,
+                    "domain": doc.get("domain"),
+                    "title": doc.get("title"),
+                    "content": doc.get("content"),
+                    "images": doc.get("images").split("|"),
+                    "url": doc.get("url"),
+                }
+            )
 
         return results

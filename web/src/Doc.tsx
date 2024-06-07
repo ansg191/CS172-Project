@@ -22,9 +22,9 @@ const resultDocSchema = z.object({
     id: z.number().int(),
     score: z.number(),
     domain: z.string(),
-    url: z.string().url(),
+    url: z.string(),
     title: z.string(),
-    images: z.string().url().array(),
+    images: z.string().array(),
     content: z.string(),
 })
 
