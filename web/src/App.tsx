@@ -39,6 +39,11 @@ function App() {
 
             <div className="item-container">
                 {data.map((doc: ResultDoc) => <Doc document={doc} key={doc.id}/>)}
+                {data.length == 0 && query.length > 0 &&
+                    <div className="card">
+                        <p>No Results Found</p>
+                    </div>
+                }
             </div>
         </>
     )
