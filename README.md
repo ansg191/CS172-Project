@@ -53,6 +53,14 @@ With the dependencies installed, the server can be run by executing the followin
 
 The script will check for the dependencies, compile the frontend, and start the server on port 5000.
 
+## Running via Docker
+
+To avoid installing dependencies, the server can be run via Docker using the following container `ghcr.io/ansg191/cs172-project:main`.
+To run via docker, simply run:
+```sh
+docker run -p 5000:5000 ghcr.io/ansg191/cs172-project:main
+```
+
 ## Manually Running
 
 To manually run the server, run the following commands:
