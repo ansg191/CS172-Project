@@ -12,7 +12,7 @@ from org.apache.lucene.queryparser.classic import QueryParser
 
 
 INDEX_PATH = "index/"
-CSV_PATH = "computerscience_data.csv"
+CSV_PATH = "data.csv"
 
 initialized = False
 
