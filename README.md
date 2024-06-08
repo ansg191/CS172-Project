@@ -32,6 +32,47 @@ The following environment variables exist:
     - Output CSV File
     - Default: “computerscience_data.csv”
 
+# Server Instructions
+
+The server uses a `flask` backend with `pylucene` to index and query documents and a `React` w/ `TypeScript` frontend.
+
+To run the server, the following dependencies are required:
+
+- `pylucene` - This is difficult to install, so using a docker container is recommended.
+- `npm`, `yarn`, or `bun` to compile the React + TypeScript frontend
+
+On start, the server will load `data.csv` in the current directory.
+If the lucene index hasn't already been built, it will be constructed from the data in the CSV file.
+
+## Running using Script
+
+With the dependencies installed, the server can be run by executing the following script:
+```sh
+./server.sh
+```
+
+The script will check for the dependencies, compile the frontend, and start the server on port 5000.
+
+## Manually Running
+
+To manually run the server, run the following commands:
+```sh
+# Enter the web directory
+pushd web
+
+# Install JS dependencies (use npm, yarn, or bun here)
+npm install
+
+# Build the frontend into the `dist` directory
+npm run build
+
+# Return back to repo directory
+popd
+
+# Run the server
+flask run -h 0.0.0.0 -p 5000
+```
+
 ## Group Members
 
 | Name                     | SID       | NID      |
