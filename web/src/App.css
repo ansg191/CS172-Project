@@ -5,6 +5,10 @@
     text-align: center;
 }
 
+h1 {
+    margin-bottom: 0.25em;
+}
+
 .card {
     margin: 2em;
     padding: 1.5em;
@@ -23,4 +27,24 @@
 
 .item-container {
     margin-top: 1em;
+}
+
+.group-title {
+    margin: 0 0 0.25em;
+}
+
+.group-table {
+    border-collapse: collapse;
+    margin-left: 1em;
+    text-align: left;
+}
+
+.group-table td {
+    padding: 0.5em;
+    white-space: nowrap;
+    border-top: 1px solid #ccc
+}
+
+.group-table tbody tr:last-child td {
+    border-bottom: 1px solid #ccc;
 }
