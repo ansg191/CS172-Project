@@ -1,5 +1,6 @@
 .card-body {
     text-align: left;
+    display: flex;
 }
 
 .doc-title {
@@ -17,4 +18,14 @@
 
 .doc-domain {
     margin: 0 1em 0 0;
+}
+
+.image-container {
+    margin-right: 1em;
+}
+
+.image {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
 }
